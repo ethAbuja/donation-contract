@@ -7,8 +7,10 @@ contract Donation {
     event Donated(address indexed donor, uint256 amount);
     event Withdrawn(address indexed receiver, uint256 amount);
     event OwnerChanged(address newOwner);
+    event NextOwnerUpdated(address nextOwner);
 
     address public owner;
+    address nextOwner;
     mapping(address => uint256) donations;
 
     constructor() {
@@ -39,12 +41,21 @@ contract Donation {
         emit Withdrawn(owner, contractBalance);
     }
 
-    function changeOwner(address _newOwner) external {
+    function setNextOwner(address _nextOwner) external {
         onlyOwner();
 
-        owner = _newOwner;
+        nextOwner = _nextOwner;
 
-        emit OwnerChanged(_newOwner);
+        emit NextOwnerUpdated(_nextOwner);
+    }
+    function acceptOwnership() external {
+        require(msg.sender == nextOwner, "only next owner can accept ownershipt");
+
+        owner = nextOwner;
+
+        nextOwner = address(0);
+
+        emit OwnerChanged(owner);
     }
 
     function showContractBalance(address _stableToken) external view returns (uint) {
