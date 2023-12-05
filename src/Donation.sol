@@ -48,8 +48,9 @@ contract Donation {
 
         emit NextOwnerUpdated(_nextOwner);
     }
+
     function acceptOwnership() external {
-        require(msg.sender == nextOwner, "only next owner can accept ownershipt");
+        require(msg.sender == nextOwner, "only next owner can accept ownership");
 
         owner = nextOwner;
 
@@ -58,13 +59,11 @@ contract Donation {
         emit OwnerChanged(owner);
     }
 
-    function showContractBalance(address _stableToken) external view returns (uint) {
+    function showContractBalance(address _stableToken) external view returns (uint256) {
         return IERC20(_stableToken).balanceOf(address(this));
     }
 
     function onlyOwner() private {
         require(msg.sender == owner, "not owner");
     }
-
-    receive() external payable {}
 }
