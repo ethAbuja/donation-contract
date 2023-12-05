@@ -6,8 +6,8 @@ import "./interface/IERC20.sol";
 contract Donation {
     event Donated(address indexed donor, uint256 amount);
     event Withdrawn(address indexed receiver, uint256 amount);
-    event OwnerChanged(address newOwner);
     event NextOwnerUpdated(address nextOwner);
+    event OwnerChanged(address newOwner);
 
     address public owner;
     address nextOwner;
