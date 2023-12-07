@@ -41,8 +41,6 @@ contract DonationTest is Test {
         vm.stopPrank();
     }
 
-
-
     function test_withdrawal() public {
         vm.startPrank(owner);
             uint256 amount = 10e18;
@@ -62,6 +60,27 @@ contract DonationTest is Test {
 
             assertEq(usdt.balanceOf(owner), userBalanceAfterDonation + amount);
         vm.stopPrank();
+    }
+
+    function test_onlyOwner_revert() public {
+        vm.startPrank(owner);
+            uint256 amount = 10e18;
+            uint256 userInitialUsdtBalance = usdt.balanceOf(owner);
+
+            usdt.approve(address(donationContract), amount);
+
+            donationContract.donate(address(usdt), amount);
+
+            assertEq(usdt.balanceOf(address(donationContract)), amount);
+            assertEq(usdt.balanceOf(owner), userInitialUsdtBalance - amount);
+        vm.stopPrank();
+
+        vm.startPrank(nextOwner);
+            vm.expectRevert(bytes("not owner"));
+            // Start withdrawal
+            donationContract.withdraw(address(usdt));
+        vm.stopPrank();
+        
     }
 
     function test_setNextOwner() public {
