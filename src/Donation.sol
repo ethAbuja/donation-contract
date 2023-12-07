@@ -63,7 +63,7 @@ contract Donation {
         return IERC20(_stableToken).balanceOf(address(this));
     }
 
-    function onlyOwner() private {
+    function onlyOwner() private view {
         require(msg.sender == owner, "not owner");
     }
 }

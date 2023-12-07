@@ -19,7 +19,7 @@ contract DonationTest is Test {
 
         usdt.approve(address(donationContract), amount);
 
-        donation.donate(address(usdt), amount);
+        donationContract.donate(address(usdt), amount);
 
         assertEq(usdt.balanceOf(address(donationContract)), amount);
     }
